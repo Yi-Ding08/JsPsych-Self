@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>自己評価タスクtest</title>
+
+        <script src="jspsych/jspsych.js"></script>
+        <script src="jspsych/plugin-html-keyboard-response.js"></script>
+        <script src="jspsych/plugin-instructions.js"></script>
+        <script src="jspsych/plugin-categorize-html.js"></script>
+        
+        <link rel="stylesheet" href="https://unpkg.com/jspsych@7.2.3/css/jspsych.css">
+
+        <style>
+            .test {
+                font-size: 90px;
+                font-weight: bold;
+                color: white;
+            }
+        </style>
+    
+        <head>
+            <style>
+                body {
+                    background-color: rgb(128, 128, 128);
+                    color: white;
+                }
+            </style>
+        </head>
+    
+    </head>
+    
+<body>
+</body>
+<script>
+    // 在下面写下你的 JS 代码
+    // 初始化 jsPsych
+    const jsPsych = initJsPsych({
+    on_finish: function () {
+    jsPsych.data.get().localSave("csv", "stroop_data.csv");
+  }
+});
+
+//<ul>和子变量<li>可以做出列表的效果
+    let IC_text = `
+    <div style="text-align: left;">
+        <h3>本実験にご参加いただき、ありがとうございました。</h3>
+        <p>どの職場でも、個人の専門家だけでは解決できない複雑な問題を解決するためには、常にチームワークが重要なアプローチとなっている。<br />
+            近年では、多くの心理学者が、自己評価とコラボレーションの関係に興味を持っています。先行研究から、コラボレーションにおける<br />
+            自己評価は、コラボレーションの結果に重要な影響を与えることが分かっていますが、この神経基盤は明らかではありません。</p>
+        <p>本調査は東北大学が実施するもので、東北大学災害科学国際研究所倫理委員会の承認を得ています。<br />
+            あなたの個人情報（氏名・住所・メールアドレス等）は東北大学には提供されません。以上の内容にご同意頂いた方は、<br />
+            スペースバーを押して調査にご参加下さい。</p>
+    </div>
+    `;
+   
+    let IC = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: IC_text,
+    response_ends_trial: true,
+    choices: " ",
+    data: {
+     plugin_name: "IC"
+    }
+    };
+
+    let instruction = {
+        type: jsPsychInstructions,
+        pages: [
+            "在这个实验当中，你将对“自己”和“他人”进行形容词评价。<br />你将看到一个形容词和一个指示自我或者他人的身份词。<br />当出现从1~4的评价量表时，请选择按下对应数字表示描述该形容词多大程度上适合表述自己或者他人。<br />どの程度当てはまるかを、1(当てはまる）から4（当てはまらない）までの4段階で評価してください。",
+            "请将手放置于数字键上，当按下继续按钮后课题将立马开始。<br />次は、練習課題です。"
+        ],
+        key_forward: " ",
+        data: {
+            plugin_name: "instruction"
+        }
+    };
+
+    let end = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "スペースキーを押して自己評価課題を終了になりました",
+    //trial_duration: 5000,
+    response_ends_trial: true,
+    choices: " ",
+    data: {
+        plugin_name: "end"
+    }
+    };
+    
+    // 创建一个名为 timeline 的时间线
+    // 其中包含了 text_key_response
+    let main_timeline = [];
+
+    let trial_block = {
+    timeline: [],
+    };
+
+    let conditions = [
+    {
+        "text": "红",
+        "color": "red",
+        "correct": "r",
+        "stim_type": "相容"
+    },
+    {
+        "text": "红",
+        "color": "green",
+        "correct": "g",
+        "stim_type": "不相容"
+    },
+    {
+        "text": "绿",
+        "color": "green",
+        "correct": "g",
+        "stim_type": "相容"
+    },
+    {
+        "text": "绿",
+        "color": "red",
+        "correct": "r",
+        "stim_type": "不相容"
+    }
+    ];
+    
+    trial_block = {
+        timeline: [],
+        timeline_variables: conditions,
+        repetitions: 1,
+        randomize_order: false
+    };
+    
+    let fixation = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "<p style='font-size: 48pt;'>+</p>",
+        trial_duration: 500,
+        choices: "NO-KEYS",
+        data: {
+            plugin_name: "fixation"
+        }
+    };
+    function set_stim() {
+        let text = jsPsych.timelineVariable("text");
+        let color = jsPsych.timelineVariable("color");
+        let stim = `<p style="color: ${color}; font-size: 48pt;">${text}</p>`;
+        return stim;
+    }
+
+    let trial = {
+        type: jsPsychCategorizeHtml,
+        stimulus: set_stim,
+        choices: ["r", "g"],
+        key_answer: jsPsych.timelineVariable("correct"),
+        feedback_duration: 500,
+        show_stim_with_feedback: false,
+        correct_text: "正确",
+        incorrect_text: "错误",
+        data: {
+            plugin_name: "trial",
+            stim_type: jsPsych.timelineVariable("stim_type")
+        }
+    };
+    
+    trial_block.timeline = [
+        fixation, trial
+    ];
+
+    main_timeline = [
+        IC, instruction, trial_block, end
+    ];
+
+    jsPsych.run(main_timeline);
+    </script>
+</html>
