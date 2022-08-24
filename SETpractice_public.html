@@ -67,13 +67,13 @@
     };
 
     //   /**/: 会让代码不运行
-    /* 
+    
     var enter_fullscreen = {
         type: jsPsychFullscreen,
         message: '<p>この課題はフルスクリーンモードで行われます。</p>',
         button_label: '次',
         fullscreen_mode: true
-    }*/
+    }
 
     let instruction = {
         type: jsPsychInstructions,
@@ -245,9 +245,9 @@
         fixation, trialDisp, trialResp, feedback
     ];
 
-    //后期加上, enter_fullscreen,
+    //后期加上, 
     main_timeline = [
-        IC, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
+        IC, enter_fullscreen, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
     ];
 
     jsPsych.run(main_timeline);
