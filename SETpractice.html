@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>私的自己評価の練習タスク</title>
+
+        <script src="jspsych/jspsych.js"></script>
+        <script src="jspsych/plugin-fullscreen.js"></script>
+        <script src="jspsych/plugin-html-keyboard-response.js"></script>
+        <script src="jspsych/plugin-html-button-response.js"></script>
+        <script src="jspsych/plugin-instructions.js"></script>
+        <script src="jspsych/plugin-categorize-html.js"></script>
+        
+        <link rel="stylesheet" href="jspsych/jspsych.css">
+
+        <style>
+            .jspsych-display-element {
+                font-size: 30px;
+                font-weight: 1;
+                text-align: left;
+                color: white;
+            }
+        </style>
+    
+        <head>
+            <style>
+                body {
+                    background-color: rgb(128, 128, 128);
+                    color: white;
+                }
+            </style>
+        </head>
+    
+    </head>
+    
+<body>
+</body>
+<script>
+    // 在下面写下你的 JS 代码
+    // 初始化 jsPsych
+    const jsPsych = initJsPsych({
+    on_finish: function () {
+    jsPsych.data.get().localSave("csv", "self-evaluation.csv");
+  }
+});
+
+//<ul>和子变量<li>可以做出列表的效果
+    let IC_text = `
+    <div style="text-align: left;">
+        <h3>本実験にご参加いただき、ありがとうございました。</h3>
+        <p>被験者さんの権利を完全に保護するために、インフォームド・コンセントを必ずご確認の上、同意していただきますようお願いいたします。
+        上記をご覧になっていない方は、実験担当者にご相談ください。
+        実験を続けることを選択した場合、インフォームド・コンセントの内容を理解し、それに同意したことになります。</br></br>
+        スペースバーを押して次のページに進んでください。</p>
+    </div>
+    `;
+   
+    let IC = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: IC_text,
+    response_ends_trial: true,
+    choices: " ",
+    data: {
+     plugin_name: "IC"
+    }
+    };
+
+    let instruction = {
+        type: jsPsychInstructions,
+        pages: ['<div style="text-align: left;">この実験では、形容詞を使って「自己」と「他者」を評価します。まず、形容詞と、自己または他者を示す単語が提示されます。1～8の数字が表示されたら、どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。<br /><br />数字キーの上に手を置い、カーソルを見えないところに移動させてください。スペースバーを押すとすぐに練習課題が開始されます。'
+        ],
+        key_forward: " ",
+        data: {
+            plugin_name: "instruction"
+        }
+    };
+    
+    //   /**/: 会让代码不运行
+    /*  
+    var enter_fullscreen = {
+        type: jsPsychFullscreen,
+        message: '<p>この課題はフルスクリーンモードで行われます。</p>',
+        button_label: '次',
+        fullscreen_mode: true
+    }*/
+
+    let end = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "スペースキーを押して自己評価課題を終了になりました。実験を完了したことを実験者に伝えてください。",
+    //trial_duration: 5000,
+    response_ends_trial: true,
+    choices: " ",
+    data: {
+        plugin_name: "end"
+    }
+    };
+    
+    // 创建一个名为 timeline 的时间线
+    // 其中包含了 text_key_response
+    let main_timeline = [];
+
+    let trial_block = {
+    timeline: [],
+    };
+
+    let block1 = [
+    {
+        "text": "自分</br></br></br></br></br></br>乱暴な",
+        "stim_type": "ComNeg",
+    },
+    {
+        "text": "自分</br></br></br></br></br></br>ずけずけ",
+        "stim_type": "MosNeg"
+    },
+    {
+        "text": "自分</br></br></br></br></br></br>誠実な",
+        "stim_type": "MorPos"
+    },
+    {
+        "text": "自分</br></br></br></br></br></br>つきつめる",
+        "stim_type": "ComPos"
+    }
+    ];
+
+    let block2 = [
+    {
+        "text": "他者</br></br></br></br></br></br>根気のない",
+        "stim_type": "MorNeg"
+    },
+    {
+        "text": "他者</br></br></br></br></br></br>度胸のない",
+        "stim_type": "ComNeg"
+    },
+    {
+        "text": "他者</br></br></br></br></br></br>安定した",
+        "stim_type": "MorPos"
+    },
+    {
+        "text": "他者</br></br></br></br></br></br>冷静な",
+        "stim_type": "ComPos"
+    }
+    ];
+    
+    trial_block1 = {
+        timeline: [],
+        timeline_variables: block1,
+        repetitions: 1,
+        randomize_order: true
+    };
+
+    trial_block2 = {
+        timeline: [],
+        timeline_variables: block2,
+        repetitions: 1,
+        randomize_order: true
+    };
+
+    //开始写实验试次
+    // 记得改时间为：3000
+    let SelfBlock_ins = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "「自分」に、</br></br>どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。",
+        trial_duration: 500,
+        choices: "NO-KEYS",
+        data: {
+            plugin_name: "SelfBlock_instruction"
+        }
+    };   
+
+    let OtherBlock_ins = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "「他者」に、</br></br>どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。",
+        trial_duration: 500,
+        choices: "NO-KEYS",
+        data: {
+            plugin_name: "OtherBlock_instruction"
+        }
+    };      
+
+    
+    let fixation = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "<p style='font-size: 90pt;'>+</p>",
+        trial_duration: 500,
+        choices: "NO-KEYS",
+        data: {
+            plugin_name: "fixation"
+        }
+    };
+
+    function set_stim() {
+        let text = jsPsych.timelineVariable("text");
+        let stim = `<p style="font-size: 96pt;">${text}</p>`;
+        return stim;
+    }
+    let trialDisp = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: set_stim,
+        trial_duration: 2000,
+        prompt: '</br><p style="font-size: 35pt;">&nbsp&nbsp</br></br></br></p>',
+        choices: "NO-KEYS",
+        data: {
+            plugin_name: "trial_instruction"
+        }
+    };
+    
+    let trialResp = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: set_stim,
+        choices: ["1", "2","3","4","5","6","7","8"],
+        trial_duration: 2000,
+        prompt: '</br><p style="font-size: 35pt;">1&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp4&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp5&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp6&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp7&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp8</br></br>当てはまらない&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp当てはまる</p>',
+        response_ends_trial: false,
+        post_trial_gap: function() {
+            return Math.floor(Math.random() * 4000) + 2000;
+        },
+        data: {
+            plugin_name: "trial",
+            stim_type: jsPsych.timelineVariable("stim_type")
+        }
+    };
+    
+    trial_block1.timeline = [
+        fixation, trialDisp, trialResp
+    ];
+
+    trial_block2.timeline = [
+        fixation, trialDisp, trialResp
+    ];
+
+    //后期加上enter_fullscreen, 
+    main_timeline = [
+        IC, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
+    ];
+
+    jsPsych.run(main_timeline);
+    </script>
+</html>
