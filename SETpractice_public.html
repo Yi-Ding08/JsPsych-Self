@@ -11,6 +11,7 @@
         <script src="jspsych/plugin-html-button-response.js"></script>
         <script src="jspsych/plugin-instructions.js"></script>
         <script src="jspsych/plugin-categorize-html.js"></script>
+        <script src="jspsych/plugin-image-keyboard-response.js"></script>
         
         <link rel="stylesheet" href="jspsych/jspsych.css">
 
@@ -46,11 +47,12 @@
 });
 
 //<ul>和子变量<li>可以做出列表的效果
+/*
     let IC_text = `
     <div style="text-align: left;">
-        <h3>本実験にご参加いただき、ありがとうございました。</h3>
-        <p>被験者さんの権利を完全に保護するために、インフォームド・コンセントを必ずご確認の上、同意していただきますようお願いいたします。
-        上記をご覧になっていない方は、実験担当者にご相談ください。
+        <h3>本実験にご参加いただき、ありがとうございます。</h3>
+        <p>Googleフォーム内インフォームド・コンセントを必ずご確認の上、同意していただきますようにお願いいたします。
+        インフォームド・コンセントをご覧になっていない方は、実験担当者にご相談ください。
         実験を続けることを選択した場合、インフォームド・コンセントの内容を理解し、それに同意したことになります。</br></br>
         スペースバーを押して次のページに進んでください。</p>
     </div>
@@ -64,7 +66,7 @@
     data: {
      plugin_name: "IC"
     }
-    };
+    };*/
 
     //   /**/: 会让代码不运行
     
@@ -76,10 +78,10 @@
     }
 
     let instruction = {
-        type: jsPsychInstructions,
-        pages: ['<div style="text-align: left;">これは公的自己評価の練習タスクです。この実験では、この実験では、あなたが自分自身のことをどう思っているのかを知りたいです。形容詞を使って「自己」と「他者」を評価します。まず、自己または他者を示す単語と形容詞が提示されます。1～8の数字が表示されたら、どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価し、あなたの答えが表示されます。数字キーの上に手を置い、カーソルを見えないところに移動させてください。スペースバーを押すとすぐに練習課題が開始されます。'
-        ],
+        type: jsPsychImageKeyboardResponse,
+        stimulus: 'stimuli/key.jpg',
         key_forward: " ",
+        prompt: "<p style='text-align:left'>これは公的自己評価の練習タスクです。この実験では、あなたが自分自身のことをどう思っているのかを知りたいです。形容詞を使って「自己」と同年齢、同性の平均的な「他者」を評価します。まず、自己または他者を示す単語と形容詞が提示されます。1～8の数字が表示されたら、どの程度当てはまるかを、1(当てはまらない）から8（当てはまる）までの8段階で評価し、あなたの答えが表示されます。</p><p style='text-align:left'>スペースバーを押すとすぐに練習課題が始まりますので、図に示すように数字キーに手を置いておいてください。カーソルが実験内容の妨げにならないように、カーソルは見えないところに移動させてください。<p>準備ができたら、スペースバーを押してください。</p>",
         data: {
             plugin_name: "instruction"
         }
@@ -87,7 +89,7 @@
 
     let end = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "スペースキーを押して公的自己評価課題を終了になりました。実験を完了したことを実験者に伝えてください。",
+    stimulus: "スペースキーを押して、公的自己評価の練習タスクを終了になりました。練習タスクを完了したことを実験担当者に伝えてください。",
     response_ends_trial: true,
     choices: " ",
     data: {
@@ -160,8 +162,7 @@
     let SelfBlock_ins = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: "「自分」に、</br></br>どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。",
-        trial_duration: 500,
-        choices: "NO-KEYS",
+        key_forward: " ",
         data: {
             plugin_name: "SelfBlock_instruction"
         }
@@ -169,9 +170,8 @@
 
     let OtherBlock_ins = {
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: "「他者」に、</br></br>どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。",
-        trial_duration: 500,
-        choices: "NO-KEYS",
+        stimulus: "同年齢、同性の平均的な「他者」に、</br></br>どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。",
+        key_forward: " ",
         data: {
             plugin_name: "OtherBlock_instruction"
         }
@@ -198,7 +198,8 @@
         let stim = `<p style="font-size: 96pt;">${text}</p>`;
         return stim;
     }
-    let trialDisp = {
+    
+    /*let trialDisp = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: set_stim,
         trial_duration: 2000,
@@ -207,15 +208,15 @@
         data: {
             plugin_name: "trial_instruction"
         }
-    };
+    };*/
     
     let trialResp = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: set_stim,
-        choices: ["1", "2","3","4","5","6","7","8"],
-        trial_duration: 2000,
+        choices: ['1', '2','3','4','5','6','7','8'],
+        //trial_duration: 2000,
         prompt: '</br><p style="font-size: 35pt;">1&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp4&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp5&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp6&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp7&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp8</br></br>当てはまらない&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp当てはまる</p>',
-        response_ends_trial: false,
+        response_ends_trial: true,
     };
 
     let feedback_obj = function(){
@@ -229,25 +230,26 @@
         stimulus: [set_stim, feedback_obj],
         trial_duration: 2000,
         post_trial_gap: function() {
-            return Math.floor(Math.random() * 4000);
+            return Math.floor(Math.random() * 2000);
         },
         data: {
             plugin_name: "feedback"
         }
     }
     
-    
+    //trialDisp, 
     trial_block1.timeline = [
-        fixation, trialDisp, trialResp, feedback
+        fixation, trialResp, feedback
     ];
 
+    //trialDisp, 
     trial_block2.timeline = [
-        fixation, trialDisp, trialResp, feedback
+        fixation, trialResp, feedback
     ];
 
     //后期加上, 
     main_timeline = [
-        IC, enter_fullscreen, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
+        enter_fullscreen, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
     ];
 
     jsPsych.run(main_timeline);
