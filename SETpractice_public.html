@@ -12,7 +12,8 @@
         <script src="jspsych/plugin-instructions.js"></script>
         <script src="jspsych/plugin-categorize-html.js"></script>
         <script src="jspsych/plugin-image-keyboard-response.js"></script>
-        
+        <script src="jspsych/plugin-preload.js"></script>
+
         <link rel="stylesheet" href="jspsych/jspsych.css">
 
         <style>
@@ -45,6 +46,12 @@
     jsPsych.data.get().localSave("csv", "self-evaluation.csv");
   }
 });
+
+// aotumatically preload material
+var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
 //<ul>和子变量<li>可以做出列表的效果
 /*
@@ -80,7 +87,7 @@
     let instruction = {
         type: jsPsychImageKeyboardResponse,
         stimulus: 'stimuli/key.jpg',
-        key_forward: " ",
+        choices: ' ',
         prompt: "<p style='text-align:left'>これは公的自己評価の練習タスクです。この実験では、あなたが自分自身のことをどう思っているのかを知りたいです。形容詞を使って「自己」と同年齢、同性の平均的な「他者」を評価します。まず、自己または他者を示す単語と形容詞が提示されます。1～8の数字が表示されたら、どの程度当てはまるかを、1(当てはまらない）から8（当てはまる）までの8段階で評価し、あなたの答えが表示されます。</p><p style='text-align:left'>スペースバーを押すとすぐに練習課題が始まりますので、図に示すように数字キーに手を置いておいてください。カーソルが実験内容の妨げにならないように、カーソルは見えないところに移動させてください。<p>準備ができたら、スペースバーを押してください。</p>",
         data: {
             plugin_name: "instruction"
@@ -91,7 +98,7 @@
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "スペースキーを押して、公的自己評価の練習タスクを終了になりました。練習タスクを完了したことを実験担当者に伝えてください。",
     response_ends_trial: true,
-    choices: " ",
+    choices: ' ',
     data: {
         plugin_name: "end"
     }
@@ -162,7 +169,7 @@
     let SelfBlock_ins = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: "<p>「自分」に、</br></br>どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。<p>スペースバーを押して続行します。</p>",
-        key_forward: " ",
+        choices: ' ',
         data: {
             plugin_name: "SelfBlock_instruction"
         }
@@ -171,7 +178,7 @@
     let OtherBlock_ins = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: "<p> 同年齢、同性の平均的な「他者」に、</br></br>どの程度当てはまるかを、1(当てはまる）から8（当てはまらない）までの8段階で評価してください。<p>スペースバーを押して続行します。</p>",
-        key_forward: " ",
+        choices: ' ',
         data: {
             plugin_name: "OtherBlock_instruction"
         }
@@ -220,10 +227,11 @@
     };
 
     let feedback_obj = function(){
-        var last_trial = jsPsych.data.get().last(1).values()[0].response;
-        return "選択したのは　" + last_trial + "　です。</br></br></br></br></br></br>"
+        var last_trial = '<p style="font-size:55pt;font-weight:bold;">'+jsPsych.data.get().last(1).values()[0].response+'</p>';
+        return "選択したのは" + last_trial + "</br>"
     }
-        
+
+
     let feedback = {
         type: jsPsychHtmlKeyboardResponse,
         choices: "NO-KEYS",
@@ -236,7 +244,8 @@
             plugin_name: "feedback"
         }
     }
-    
+  //  feedback_obj[0].style.fontsize = "35pt"; 
+
     //trialDisp, 
     trial_block1.timeline = [
         fixation, trialResp, feedback
@@ -249,7 +258,7 @@
 
     //后期加上, 
     main_timeline = [
-        enter_fullscreen, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
+    preload, enter_fullscreen, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
     ];
 
     jsPsych.run(main_timeline);

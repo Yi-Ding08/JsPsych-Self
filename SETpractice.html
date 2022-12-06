@@ -12,6 +12,7 @@
         <script src="jspsych/plugin-instructions.js"></script>
         <script src="jspsych/plugin-categorize-html.js"></script>
         <script src="jspsych/plugin-image-keyboard-response.js"></script>
+        <script src="jspsych/plugin-preload.js"></script>
         
         <link rel="stylesheet" href="jspsych/jspsych.css">
 
@@ -45,6 +46,12 @@
     jsPsych.data.get().localSave("csv", "self-evaluation.csv");
   }
 });
+
+// aotumatically preload material
+var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
 //<ul>和子变量<li>可以做出列表的效果
     let IC_text = `
@@ -231,7 +238,7 @@
 
     //后期加上
     main_timeline = [
-        IC, enter_fullscreen, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
+    preload, IC, enter_fullscreen, instruction, SelfBlock_ins, trial_block1, OtherBlock_ins, trial_block2, end
     ];
 
     jsPsych.run(main_timeline);
